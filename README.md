@@ -14,7 +14,7 @@
 3. Run `composer install`.
 4. Set database credentials in the following line of .env file 
     ```
-    DATABASE_URL="mysql://user:pass@127.0.0.1:3306/snappy_shopper_test"
+    DATABASE_URL="mysql://user:pass@127.0.0.1:3306/data_base_name"
     ```
 5. Execute this command to create the database
     ```
