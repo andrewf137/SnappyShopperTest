@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Snappy Shopper Test</title>
+        <!-- CSS -->
+        <style>
+            .row {
+              display: flex;
+            }
+            .column {
+              flex: 50%;
+            }
+            .container {
+                padding: 1em;
+                /*width: 50%;*/
+                float: left;
+            }
+            form {
+                font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+                font-size: 0.8em;
+                width: 28em;
+                /*padding: 1em;*/
+            }
+            form * {
+                box-sizing: border-box;
+            }
+            form label {
+                padding: 0;
+                font-weight: bold;
+            }
+            form label.choice {
+                font-size: 0.9em;
+                font-weight: normal;
+            }
+            form label {
+                text-align: left;
+                display: block;
+            }
+            form input[type="text"] {
+                float: right;
+                width: 60px;
+                border: 1px solid #ccc;
+                font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+                font-size: 0.9em;
+                padding: 0.3em;
+            }
+            form button {
+                padding: 1em;
+                border-radius: 0.5em;
+                background: #eee;
+                border: none;
+                font-weight: bold;
+                margin-top: 1.8em;
+            }
+            form button:hover {
+                background: #ccc;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="row">
+            <div class="column">
+                <div class="container">
+                    <p>There is a total of <strong>{{ totalNumberOfProperties }}</strong> properties in the API.</p>
+                    <p>Due to limitations in the API we can not save all properties in one go.</p>
+                    <p>Please use the following fields to indicate how many properties you would like to save into the database.</p>
+                    <form class="save-properties-form" method="GET" enctype="application/x-www-form-urlencoded" action="save-properties">
+                        <p>
+                            <label>Number of properties per page (<strong>max 100</strong>)
+                            <input type="text" name="per-page" required>
+                            </label>
+                        </p>
+                        <p>
+                            <label>Page from
+                            <input type="text" name="page-from">
+                            </label>
+                        </p>
+                        <p>
+                            <label>Page to (max range of <strong>50 pages</strong>)
+                            <input type="text" name="page-to">
+                            </label>
+                        </p>
+                        <p><button type="submit">Save Properties</button></p>
+                    </form>
+                    {% for message in app.flashes('message') %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="container">
+                    <p>Before clicking this button make sure you have run fixtures by executing the following command in the project folder:</p>
+                    <p><small>(Every time this command is executed, it will empty the database and will set several random agents-properties relations)</small></p>
+                    <p><code>./bin/console doctrine:fixtures:load</code></p>
+                    <form class="return-top-agents-form" method="GET" enctype="application/x-www-form-urlencoded" action="top-agents">
+                        <p><button type="submit">Return Top Agents</button></p>
+                    </form>
+
+                    {% for agentsAndProperties in app.flashes('agentsAndProperties') %}
+                        {% if agentsAndProperties|length > 0 %}
+                            <p><u>Existing agents with its properties</u>:</p>
+                        {% endif %}
+
+                        {% for agentAndProperties in agentsAndProperties %}
+                            <div style="float:left; width: 100%;">
+                                <div style="width: 160px; font-weight: bold; float: left;">{{ agentAndProperties.agent }}: </div>
+                                <div style="float: left;">{{ agentAndProperties.properties }}</div>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+
+                    <div style="margin-bottom: 20px; float: left; width: 100%;"></div>
+
+                    {% for agents in app.flashes('topAgents') %}
+                        {% if agents|length > 0 %}
+                            <p><u>Top agents</u></p>
+                        {% endif %}
+                        {% for agent in agents %}
+                            {{ agent.agent }}<br/>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

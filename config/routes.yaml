@@ -1,0 +1,13 @@
+app:
+    path: /
+    controller: App\Controller\PropertyController::index
+
+save_properties:
+    path: /save-properties
+    controller: App\Controller\PropertyController::saveProperties
+    methods: GET
+
+top_agents:
+    path: /top-agents
+    controller: App\Controller\PropertyController::getTopAgents
+    methods: GET

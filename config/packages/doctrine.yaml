@@ -1,0 +1,34 @@
+doctrine:
+    dbal:
+        url: '%env(resolve:DATABASE_URL)%'
+        options:
+            # PDO::MYSQL_ATTR_INIT_COMMAND
+            1002: "SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))"
+
+        # IMPORTANT: You MUST configure your server version,
+        # either here or in the DATABASE_URL env var (see .env file)
+        #server_version: '13'
+    orm:
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            App:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Entity'
+                prefix: 'App\Entity'
+                alias: App
+        dql:
+            datetime_functions:
+                date: DoctrineExtensions\Query\Mysql\Date
+                day: DoctrineExtensions\Query\Mysql\Day
+                month: DoctrineExtensions\Query\Mysql\Month
+                week: DoctrineExtensions\Query\Mysql\Week
+                year: DoctrineExtensions\Query\Mysql\Year
+                datediff: DoctrineExtensions\Query\Mysql\DateDiff
+                timestampdiff: DoctrineExtensions\Query\Mysql\TimestampDiff
+            string_functions:
+                replace: DoctrineExtensions\Query\Mysql\Replace
+                group_concat: DoctrineExtensions\Query\Mysql\GroupConcat
+                date_format: DoctrineExtensions\Query\Mysql\DateFormat
